@@ -1432,6 +1432,8 @@ a:hover { color: var(--accent-hover); }
   background: var(--surface); border: 1px solid var(--rule); padding: 2px;
 }
 .entry__orgname { font-size: .875rem; color: var(--ink-2); font-weight: 500; }
+.entry__orglink { color: inherit; }
+.entry__orglink:hover { color: var(--accent); text-decoration: underline; text-underline-offset: .16em; }
 .entry__orgname .place { color: var(--ink-3); font-weight: 400; }
 .entry__desc { font-size: .885rem; color: var(--ink-2); line-height: 1.65; }
 .entry__sub { font-size: .855rem; color: var(--ink-3); margin-bottom: .5rem; }
@@ -2675,12 +2677,15 @@ const SITE = {
      Reverse-chronological, rendered as a timeline. `end` accepts "Present".
      `logo` is optional — a missing file draws a lettered monogram, so a row
      never shows a broken image.
+     `orgUrl` is optional too: with one, the organisation's name becomes a
+     link, the way the journal names do under Academic Services.
      `link` is optional: { label, href }, e.g. "View Publication".
      ----------------------------------------------------------------------- */
   experience: [
     {
       role: "Research Scholar",
       org: "Machine Learning Lab, Jeju National University",
+      orgUrl: "https://www.jejunu.ac.kr/eng/",
       place: "Jeju, South Korea",
       start: "Mar 2025", end: "Present",
       logo: "logos/JNU logo.png",
@@ -2690,6 +2695,7 @@ const SITE = {
     {
       role: "Machine Learning Engineer",
       org: "MasterMinds Enterprises (MME)",
+      orgUrl: "https://webnike.com/",
       place: "Karachi, Pakistan",
       start: "Jun 2023", end: "Feb 2025",
       logo: "logos/masterminds enterprises logo.png",
@@ -2698,6 +2704,7 @@ const SITE = {
     {
       role: "Research Engineer",
       org: "Augmented Startups",
+      orgUrl: "https://www.augmentedstartups.com/",
       place: "Johannesburg, South Africa",
       start: "May 2022", end: "Apr 2023",
       logo: "logos/Augmented Startups logo.jpg",
@@ -2706,6 +2713,7 @@ const SITE = {
     {
       role: "Research Assistant",
       org: "Sukkur IBA University",
+      orgUrl: "https://www.iba-suk.edu.pk/",
       place: "Sukkur, Pakistan",
       start: "Aug 2019", end: "Apr 2021",
       logo: "logos/SIBA_Logo.jpg",
@@ -4032,7 +4040,17 @@ const SITE = {
     kids.push(el("div", { class: "entry__org" }, [
       safeImg(e.logo, (e.org || e.role || "Institution") + " logo", "entry__logo", monogram(e.org || e.role)),
       el("span", { class: "entry__orgname" }, [
-        has(e.degree) ? txt(e.org || e.role) : txt(e.org),
+        /* The organisation's name links to the organisation, as the journal
+           names do under Academic Services. The place stays plain text —
+           it is not part of what the link points at. */
+        (function () {
+          var label = has(e.degree) ? txt(e.org || e.role) : txt(e.org);
+          if (!has(e.orgUrl)) return label;
+          return el("a", {
+            class: "entry__orglink", href: encodeURI(e.orgUrl),
+            rel: "noopener", target: "_blank"
+          }, [label]);
+        }()),
         has(e.place) ? el("span", { class: "place", text: " · " + e.place }) : null
       ])
     ]));
