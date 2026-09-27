@@ -3967,17 +3967,19 @@ const SITE = {
     var tabs = groups.map(function (g) {
       return { href: "#" + g.id, label: g.chip, count: g.items.length };
     });
-    /* Deliberately no chip for Under Review: a count of submitted work sitting
-       beside the published counts reads as if it were equivalent. The section
-       is still there, below.
-
-       A patent counts once it has an application number. Until then it is an
-       intention, and a chip would overstate it. */
-    var filed = (SITE.patents || []).filter(function (p) { return has(p.number); });
-    if (filed.length) {
+    /* Under Review and Patent each get a chip, at your request. Note they sit
+       beside the published counts and read with the same weight, which is why
+       they were left out before — the labels are the only thing telling a
+       reader that these are not published work. */
+    if (has(note) && SITE.underReviewCount) {
+      tabs.push({ href: "#pubs-review", label: "Under Review / Ongoing",
+                  count: SITE.underReviewCount });
+    }
+    var patents = (SITE.patents || []);
+    if (patents.length) {
       tabs.push({ href: "#pubs-patent",
-                  label: filed.length === 1 ? "Patent" : "Patents",
-                  count: filed.length });
+                  label: patents.length === 1 ? "Patent" : "Patents",
+                  count: patents.length });
     }
     if (tabs.length > 1) {
       children.unshift(el("nav", { class: "pubs-bar", "aria-label": "Jump to a publication type" },
