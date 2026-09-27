@@ -2476,6 +2476,9 @@ const SITE = {
      |           via profile.nameAliases — spell it as the venue did.    |
      | venue     Journal or conference, as you would cite it.            |
      | year      Publication year.                                       |
+     | date      Optional full publication date, shown instead of the    |
+     |           year, e.g. "20 Aug 2025". Use the date the paper        |
+     |           actually appeared, not the issue cover date.            |
      | tldr      ONE sentence, plain language, describing what the paper |
      |           DOES. No first person. No "novel", no "state-of-the-    |
      |           art". A professor should get it without opening the     |
@@ -2495,7 +2498,7 @@ const SITE = {
       id: "j1", type: "journal", thread: "",
       title: "Hybrid Framework Combining Diffusion-Based Image Augmentation and Feature Level SMOTE for Addressing Extreme Class Imbalance",
       authors: ["Raj Kumar", "Yong-Woon Kim", "Yung-Cheol Byun"],
-      venue: "IEEE Access", year: "2025",
+      venue: "IEEE Access", year: "2025", date: "20 Aug 2025",
       tldr: "Combines diffusion-based image augmentation with feature-level SMOTE to improve minority-class solar panel classification under extreme imbalance.",
       thumb: "assets/pub-j1.png",
       thumbAlt: "Methodology diagram of the DiSMHA framework: data collection and preprocessing, stable diffusion image generation, feature extraction, SMOTE feature-level oversampling, model selection and evaluation",
@@ -2506,7 +2509,7 @@ const SITE = {
       id: "j2", type: "journal", thread: "",
       title: "Mitigating Data Imbalance Using Image-Based Stable Diffusion and Feature-Level SMOTE for Solar Panel Classifications with CNNs",
       authors: ["Raj Kumar", "Yong-Woon Kim", "Yung-Cheol Byun"],
-      venue: "Energy Reports", year: "2026",
+      venue: "Energy Reports", year: "2026", date: "9 Feb 2026",
       tldr: "Uses stable diffusion and feature-level SMOTE to rebalance solar panel images before CNN classification.",
       thumb: "assets/pub-j2.png",
       thumbAlt: "Methodology diagram: dataset preparation and preprocessing, data augmentation with SMOTE and stable diffusion, balanced dataset, training and testing, model selection and performance evaluation",
@@ -2517,7 +2520,7 @@ const SITE = {
       id: "j3", type: "journal", thread: "",
       title: "Multi-Tier Data Augmentation and Balancing Framework Integrating Diffusion, Tomek Link, and SMOTE (DiToS) for Robust Image-Based Fault Detection in Solar Panels",
       authors: ["Raj Kumar", "Yong-Woon Kim", "Yung-Cheol Byun"],
-      venue: "Sustainable Energy Technologies and Assessments", year: "2025",
+      venue: "Sustainable Energy Technologies and Assessments", year: "2026", date: "8 Mar 2026",
       tldr: "Stacks diffusion, Tomek Link cleaning, and SMOTE into a multi-stage balancing pipeline for solar panel fault detection.",
       thumb: "assets/pub-j3.png",
       thumbAlt: "Eight-stage methodology diagram of the DiToS framework, from data collection through synthetic image generation, feature-level oversampling, Tomek Link cleaning, cross-validation and robustness testing",
@@ -2932,14 +2935,14 @@ const SITE = {
      built from it. `alt` alternates the background shade, so it must flip on
      every row after any reorder. */
   nav: [
-    { id: "news",         label: "News & Photos",   title: "News",             alt: false },
-    { id: "publications", label: "Publications",    title: "Publications",     alt: true  },
-    { id: "projects",     label: "Projects",        title: "Projects",         alt: false },
-    { id: "awards",       label: "Awards",          title: "Awards & Scholarships", alt: true },
-    { id: "education",    label: "Education",       title: "Education",        alt: false },
-    { id: "experience",   label: "Experience",      title: "Work Experience",  alt: true  },
+    { id: "news",         label: "News & Photos",     title: "News",              alt: false },
+    { id: "publications", label: "Publications",      title: "Publications",      alt: true  },
+    { id: "education",    label: "Education",         title: "Education",         alt: false },
+    { id: "experience",   label: "Experience",        title: "Work Experience",   alt: true  },
+    { id: "awards",       label: "Awards",            title: "Awards & Scholarships", alt: false },
+    { id: "projects",     label: "Projects",          title: "Projects",          alt: true  },
     { id: "services",     label: "Academic Services", title: "Academic Services", alt: false },
-    { id: "contact",      label: "Contact",         title: "Get In Touch",     alt: true  }
+    { id: "contact",      label: "Contact",           title: "Get In Touch",      alt: true  }
   ],
 
   /* Milliseconds between hero slides. */
@@ -3793,8 +3796,10 @@ const SITE = {
       ? el("span", { class: "pub__venue pub__venue--review",
                      text: has(pub.label) ? pub.label : "Under review" })
       : el("span", { class: "pub__venue" }, [
-          (has(pub.venue) || has(pub.year))
-            ? document.createTextNode([pub.venue, pub.year].filter(has).join(" "))
+          /* A full date wins over the bare year when one is given. */
+          (has(pub.venue) || has(pub.date) || has(pub.year))
+            ? document.createTextNode(
+                [pub.venue, has(pub.date) ? pub.date : pub.year].filter(has).join(" \u00b7 "))
             : txt("", "TODO venue")
         ]);
 
