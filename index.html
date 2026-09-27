@@ -1253,6 +1253,7 @@ a:hover { color: var(--accent-hover); }
 .awards-grid { display: grid; gap: .85rem; }
 .awards-grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
 .awards-grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+.awards-grid--1 { grid-template-columns: minmax(0, 1fr); }
 
 /* ---- a card ---- */
 .award {
@@ -1271,6 +1272,9 @@ a:hover { color: var(--accent-hover); }
   background: var(--new-bg); color: var(--new-ink);
 }
 .award--fund .award__ico { background: var(--accent-soft); color: var(--accent); }
+/* Service is neither a prize nor a grant, so it gets its own neutral badge
+   rather than borrowing the gold of an award. */
+.award--service .award__ico { background: var(--accent-soft); color: var(--accent); }
 .award__ico svg { width: 17px; height: 17px; }
 .award__head {
   display: flex; align-items: baseline; justify-content: space-between;
@@ -2016,21 +2020,12 @@ const SITE = {
      `text` allows <a>, <strong> and <em>; everything else is stripped.
      ----------------------------------------------------------------------- */
   news: [
-    { date: "Mar 2026", kind: "article", text: "Article published in <strong>pv-magazine</strong> — <a href=\"https://www.pv-magazine.com/2026/03/04/how-to-address-imbalance-datasets-in-solar-panel-dust-detection/\">How to Address Imbalance Datasets in Solar Panel Dust Detection</a>." },
+    { date: "Jun 2026", kind: "verify", text: "Served as a <strong>peer reviewer</strong> for the <strong>Journal of Artificial Intelligence</strong>." },
+    { date: "Mar 2026", kind: "article", text: "Article published in <strong>pv-magazine</strong> \u2014 <a href=\"https://www.pv-magazine.com/2026/03/04/how-to-address-imbalance-datasets-in-solar-panel-dust-detection/\" rel=\"noopener\" target=\"_blank\">How to address imbalance datasets in solar panel dust detection</a>." },
     { date: "Feb 2026", kind: "award", text: "<strong>1st Position, Best Presentation</strong> at the BK-21 10th Colloquium on New Energy Industry, Jeju National University." },
-    { date: "Jan 2026", kind: "award", text: "<strong>Best Paper Award</strong> at the ICOBAR-SMART Joint Conference, BINUS University, Jakarta — <em>Multimodal Cross-Site Solar Energy Forecasting Using Large Language Model</em>." },
-    { date: "2026", kind: "journal", text: "Paper published in <strong>Energy Reports</strong> — <em>Mitigating Data Imbalance Using Image-Based Stable Diffusion and Feature-Level SMOTE for Solar Panel Classifications with CNNs</em>." },
-    { date: "2026", kind: "podium", text: "Paper presented at the <strong>ICOBAR SMART Joint Conference</strong>, BINUS University, Jakarta — <em>Multimodal Cross-Site Solar Energy Forecasting Using Large Language Model</em>." },
-    { date: "Dec 2025", kind: "award", text: "<strong>Best Presentation Paper Award</strong> at ICCC 2025, National Taipei University of Technology, Taipei — <em>LLM-Augmented Multimodal Approach to Reliable Solar Energy Forecasting</em>." },
-    { date: "Sep 2025", kind: "verify", text: "Served as a <strong>peer reviewer</strong> for <strong>PLoS One</strong>." },
-    { date: "Jul 2025", kind: "award", text: "<strong>Best Paper Award</strong> at ADINTECH 2025, Phnom Penh, Cambodia — <em>Image-Level Generative Oversampling and Boundary-Based Cleaning for Solar Panel Fault Detection</em>." },
-    { date: "2025", kind: "journal", text: "Paper published in <strong>IEEE Access</strong> — <em>Hybrid Framework Combining Diffusion-Based Image Augmentation and Feature Level SMOTE for Addressing Extreme Class Imbalance</em>." },
-    { date: "2025", kind: "journal", text: "Paper published in <strong>Sustainable Energy Technologies and Assessments</strong> — <em>Multi-Tier Data Augmentation and Balancing Framework Integrating Diffusion, Tomek Link, and SMOTE (DiToS)</em>." },
-    { date: "2025", kind: "podium", text: "Paper presented at the <strong>International Conference on Convergence Contents (ICCC 2025)</strong> in Taipei — <em>LLM-Augmented Multimodal Approach to Reliable Solar Energy Forecasting</em>." },
-    { date: "2025", kind: "podium", text: "Paper presented at <strong>ADINTECH 2025</strong>, Phnom Penh — <em>Image-Level Generative Oversampling and Boundary-Based Cleaning for Solar Panel Fault Detection</em>." },
-    { date: "2025", kind: "podium", text: "Paper presented at the <strong>Korea Information Technology Society Summer Conference</strong> — <em>Hybrid Approach to Mitigate Extreme Class Imbalance Using Stable Diffusion and SMOTE</em>." },
-    { date: "Mar 2025", kind: "flag", text: "Began the M.S. in Electronics Engineering at <strong>Jeju National University</strong>, in the Machine Learning Lab, on a BK-21 fully funded scholarship." },
-    { date: "2021", kind: "journal", text: "Paper published in <strong>IJACSA</strong> — <em>Fungal Blast Disease Detection in Rice Seed Using Machine Learning</em>." }
+    { date: "Jan 2026", kind: "award", text: "<strong>Best Paper Award</strong> at the ICOBAR-SMART Joint Conference, BINUS University, Jakarta \u2014 <em>Multimodal Cross-Site Solar Energy Forecasting Using Large Language Model</em>." },
+    { date: "2026", kind: "journal", text: "Paper published in <strong>Energy Reports</strong> \u2014 <em>Mitigating Data Imbalance Using Image-Based Stable Diffusion and Feature-Level SMOTE for Solar Panel Classifications with CNNs</em>." },
+    { date: "Dec 2025", kind: "award", text: "<strong>Best Presentation Paper Award</strong> at ICCC 2025, National Taipei University of Technology, Taipei \u2014 <em>LLM-Augmented Multimodal Approach to Reliable Solar Energy Forecasting</em>." }
   ],
 
   /* ------------------------- HERO CAROUSEL (unused) -----------------------
@@ -2764,9 +2759,12 @@ const SITE = {
     eyebrow: "",
     footQuote: "",
     tags: [],
+    /* `dated: false` drops the year chip for a group whose entries carry
+       their own dates in the text instead. */
     groups: [
       { kind: "award",       icon: "trophy", title: "Awards & Honors", cols: 2 },
-      { kind: "scholarship", icon: "medal",  title: "Scholarships",    cols: 3 }
+      { kind: "scholarship", icon: "medal",  title: "Scholarships",    cols: 3 },
+      { kind: "service",     icon: "verify", title: "Service",         cols: 1, dated: false }
     ]
   },
 
@@ -2821,6 +2819,12 @@ const SITE = {
       title: "THP-2016 Scholarship",
       org: "Sukkur IBA University",
       for: "Foundation semester"
+    },
+    {
+      kind: "service",
+      title: "Peer Reviewer",
+      org: "Journal of Artificial Intelligence (since Jun 2026) \u00b7 PLOS ONE (since Sep 2025)",
+      for: "Manuscripts on machine learning, data augmentation and AI-based predictive modelling"
     }
   ],
 
@@ -2843,14 +2847,17 @@ const SITE = {
      are omitted automatically — no empty shelves.
      `alt: true` gives a section the tinted background (they alternate).
      ----------------------------------------------------------------------- */
+  /* This array is the page: sections render in this order, and the nav is
+     built from it. `alt` alternates the background shade, so it must flip on
+     every row after any reorder. */
   nav: [
-    { id: "news",         label: "News & Photos", title: "News",              alt: false },
-    { id: "education",    label: "Education",     title: "Education",         alt: true  },
-    { id: "publications", label: "Publications",  title: "Publications",      alt: false },
-    { id: "awards",       label: "Awards",        title: "Awards & Scholarships", alt: true },
-    { id: "projects",     label: "Projects",      title: "Projects",          alt: false },
-    { id: "experience",   label: "Experience",    title: "Work Experience",   alt: true  },
-    { id: "contact",      label: "Contact",       title: "Get In Touch",      alt: false }
+    { id: "news",         label: "News & Photos",   title: "News",             alt: false },
+    { id: "publications", label: "Publications",    title: "Publications",     alt: true  },
+    { id: "projects",     label: "Projects",        title: "Projects",         alt: false },
+    { id: "awards",       label: "Awards & Service", title: "Awards & Service", alt: true  },
+    { id: "education",    label: "Education",       title: "Education",        alt: false },
+    { id: "experience",   label: "Experience",      title: "Work Experience",  alt: true  },
+    { id: "contact",      label: "Contact",         title: "Get In Touch",     alt: false }
   ],
 
   /* Milliseconds between hero slides. */
@@ -4027,15 +4034,20 @@ const SITE = {
     if (!items.length) return null;
     var meta = SITE.awardsMeta || {};
 
-    function card(a) {
-      var scholarship = a.kind === "scholarship";
-      return el("li", { class: "award" + (scholarship ? " award--fund" : "") }, [
-        el("span", { class: "award__ico" }, [icon(scholarship ? "medal" : "trophy")]),
+    function card(a, g) {
+      var variant = a.kind === "scholarship" ? " award--fund"
+                  : a.kind === "service" ? " award--service" : "";
+      /* A group marked `dated: false` carries its dates inside the text, so a
+         year chip there would either repeat them or read as missing. */
+      var wantsDate = !g || g.dated !== false;
+      return el("li", { class: "award" + variant }, [
+        el("span", { class: "award__ico" }, [icon((g && g.icon) || "trophy")]),
         el("div", { class: "award__body" }, [
           el("div", { class: "award__head" }, [
             el("h4", { class: "award__title" }, [txt(a.title)]),
-            has(a.date) ? el("span", { class: "award__year", text: a.date })
-                        : el("span", { class: "award__year todo", text: "date TBC" })
+            !wantsDate ? null
+              : has(a.date) ? el("span", { class: "award__year", text: a.date })
+                            : el("span", { class: "award__year todo", text: "date TBC" })
           ]),
           el("p", { class: "award__org" }, [txt(a.org)]),
           has(a.for) ? el("p", { class: "award__note" }, [
@@ -4054,7 +4066,8 @@ const SITE = {
           el("span", { class: "award-group__ico" }, [icon(g.icon || "trophy")]),
           el("h3", { class: "award-group__title", text: g.title })
         ]),
-        el("ul", { class: "awards-grid awards-grid--" + (g.cols || 2) }, members.map(card))
+        el("ul", { class: "awards-grid awards-grid--" + (g.cols || 2) },
+           members.map(function (a) { return card(a, g); }))
       ]);
     }).filter(Boolean);
 
