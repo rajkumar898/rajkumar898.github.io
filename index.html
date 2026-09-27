@@ -2738,6 +2738,7 @@ const SITE = {
   education: [
     {
       role: "Jeju National University",
+      orgUrl: "https://www.jejunu.ac.kr/eng/",
       degree: "M.S. in Electronics Engineering",
       place: "Jeju, South Korea",
       start: "Mar 2025", end: "Expected Feb 2027",
@@ -2751,6 +2752,7 @@ const SITE = {
     },
     {
       role: "Sukkur IBA University",
+      orgUrl: "https://www.iba-suk.edu.pk/",
       degree: "B.E. in Electrical Engineering (Electronics)",
       place: "Sukkur, Pakistan",
       start: "Aug 2016", end: "Aug 2020",
@@ -4086,7 +4088,12 @@ const SITE = {
 
     var head = el("div", { class: "edu-card__head" }, [
       el("div", null, [
-        el("h3", { class: "edu-card__name" }, [txt(e.role)]),
+        el("h3", { class: "edu-card__name" }, [
+          has(e.orgUrl)
+            ? el("a", { class: "entry__orglink", href: encodeURI(e.orgUrl),
+                        rel: "noopener", target: "_blank" }, [txt(e.role)])
+            : txt(e.role)
+        ]),
         has(e.degree) ? el("p", { class: "edu-card__degree", text: e.degree }) : null,
         has(e.place)
           ? el("p", { class: "edu-card__place" }, [
