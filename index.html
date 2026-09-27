@@ -2544,10 +2544,7 @@ const SITE = {
       tldr: "Adds SBERT embeddings of maintenance logs to weather and generation data, and tests generalisation to unseen PV sites with leave-one-site-out evaluation.",
       thumb: "assets/pub-c5.png",
       thumbAlt: "Methodology diagram in five stages: data sources, feature construction, model testing, LOSO evaluation and forecasting results across seven photovoltaic sites",
-      /* TODO \u2014 this one has no link yet. Send me its DBpia page (the
-         others use https://www.dbpia.co.kr/journal/articleDetail?nodeId=...)
-         and it drops straight in as `page:`. */
-      links: {}
+      links: { page: "https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE12900921" }
     }
   ],
 
@@ -3599,7 +3596,7 @@ const SITE = {
     var children = groups.map(function (g) {
       var cards = g.items.map(projCard);
       var listId = g.def.id + "-list";
-      var list = el("ol", { class: "proj-grid timeline", id: listId }, cards);
+      var list = el("ol", { class: "proj-grid", id: listId }, cards);
       var kids = [groupHead(g.def.title), list];
 
       var extra = cards.length - PROJECTS_SHOWN;
