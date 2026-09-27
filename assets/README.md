@@ -142,7 +142,7 @@ Referenced by: `SITE.actions[]` (the "Download CV" entry)
 
 | File | Dimensions | Format | Notes |
 |---|---|---|---|
-| `favicon.ico`, `favicon-32.png`, `favicon-192.png` | 16–48, 32, 192 | ICO / PNG | **Done** — the RK monogram, built from `webpage_icon.png` at the repo root (that master is gitignored). |
+| `favicon.ico`, `favicon-32.png`, `favicon-192.png` | 16–48, 32, 192 | ICO / PNG | **Done** — the RK monogram, built from `webpage_icon_3.png` at the repo root (that master is gitignored). |
 | `apple-touch-icon.png` | **180 × 180** | PNG, opaque background | Optional. Used when someone adds the site to an iOS home screen. |
 
 Referenced by: the `<link rel="icon">` tags in `<head>`.

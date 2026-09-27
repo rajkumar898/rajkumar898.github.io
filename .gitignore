@@ -102,5 +102,6 @@ tools/_gallery.txt
 # ---- image masters superseded by a web copy -----------------------------
 jeju_contact_background.png
 
-# ---- favicon master; assets/favicon-*.png and favicon.ico are built from it
-webpage_icon.png
+# ---- favicon masters; assets/favicon-*.png and favicon.ico are built from
+# webpage_icon_3.png (the others are earlier drafts)
+webpage_icon*.png
