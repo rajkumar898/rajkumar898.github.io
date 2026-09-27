@@ -1018,6 +1018,45 @@ a:hover { color: var(--accent-hover); }
   content: "·"; margin-right: .55rem; color: var(--rule-strong);
 }
 
+/* ---- academic services --------------------------------------------------
+   Same card as an award, but the emphasis is the journal rather than a prize,
+   so there is no gold badge. */
+.svc-list { display: grid; gap: .85rem; }
+.svc {
+  display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: .9rem;
+  padding: 1.25rem 1.35rem; border-radius: var(--r-lg);
+  align-items: start;
+}
+.svc__ico {
+  display: flex; align-items: center; justify-content: center;
+  width: 2.25rem; height: 2.25rem; border-radius: 50%; flex: none;
+  background: var(--accent-soft); color: var(--accent);
+}
+.svc__ico svg { width: 17px; height: 17px; }
+.svc__head {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: .2rem 1rem;
+}
+.svc__role { font-size: 1.0625rem; font-weight: 700; line-height: 1.35; color: var(--ink); }
+.svc__date {
+  font-size: .8125rem; font-weight: 600; color: var(--accent);
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.svc__org { font-size: .95rem; font-weight: 500; color: var(--ink-2); margin: .15rem 0 0; }
+.svc__ms { font-size: .875rem; color: var(--ink-2); line-height: 1.6; margin: .55rem 0 0; }
+.svc__ms-label { font-weight: 600; color: var(--ink-3); }
+.svc__note { font-size: .875rem; color: var(--ink-3); line-height: 1.65; margin: .4rem 0 0; }
+.svc__link { margin: .7rem 0 0; }
+.svc__link a {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .82rem; font-weight: 600; color: var(--accent);
+}
+.svc__link a:hover { text-decoration: underline; text-underline-offset: .15em; }
+.svc__link .ico { width: 14px; height: 14px; flex: none; }
+@media (max-width: 560px) {
+  .svc { grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: 1.1rem 1.15rem; }
+}
+
 /* ===========================================================================
    8. PUBLICATIONS
    =========================================================================== */
@@ -2714,6 +2753,38 @@ const SITE = {
      No form, by design — a mailto is faster for the reader and cannot break.
      Delete `note` to hide that line. Channels with a TODO href are omitted.
      ----------------------------------------------------------------------- */
+  /* --------------------------- ACADEMIC SERVICES -------------------------
+     Reviewing and other service to the field. One entry per assignment.
+
+       role        what you did
+       org         the journal or venue
+       date        when it started, or the month of the review
+       manuscript  the title reviewed, shown in quotes — omit it and the line
+                   is simply not drawn
+       note        one sentence on what the review covered. THESE TWO ARE MY
+                   WORDING, written from the manuscript title and the scope you
+                   gave me; they claim nothing about your verdict. Rewrite them.
+       link        { label, href } — the ORCID record, where these are listed
+     ----------------------------------------------------------------------- */
+  services: [
+    {
+      role: "Peer Reviewer",
+      org: "PLOS ONE",
+      date: "Since Sep 2025",
+      manuscript: "An Intelligent and Interpretable Framework for Sustainable Solar Panel Maintenance",
+      note: "Reviewed the machine-learning methodology, the handling of class imbalance in the image data, and whether the reported interpretability claims followed from the evidence presented.",
+      link: { label: "Verified on ORCID", href: "https://orcid.org/0009-0008-6070-3855" }
+    },
+    {
+      role: "Peer Reviewer",
+      org: "Journal of Artificial Intelligence",
+      date: "Since Jun 2026",
+      manuscript: "An Intelligent and Interpretable Framework for Sustainable Solar Panel Maintenance",
+      note: "Assessed the model design, the evaluation protocol and the reproducibility of the reported results for an AI-based predictive maintenance framework.",
+      link: { label: "Verified on ORCID", href: "https://orcid.org/0009-0008-6070-3855" }
+    }
+  ],
+
   contact: {
     email: "engr.rajkumar898@gmail.com",
 
@@ -2760,8 +2831,7 @@ const SITE = {
        their own dates in the text instead. */
     groups: [
       { kind: "award",       icon: "trophy", title: "Awards & Honors", cols: 2 },
-      { kind: "scholarship", icon: "medal",  title: "Scholarships",    cols: 3 },
-      { kind: "service",     icon: "verify", title: "Service",         cols: 1, dated: false }
+      { kind: "scholarship", icon: "medal",  title: "Scholarships",    cols: 3 }
     ]
   },
 
@@ -2816,12 +2886,6 @@ const SITE = {
       title: "THP-2016 Scholarship",
       org: "Sukkur IBA University",
       for: "Foundation semester"
-    },
-    {
-      kind: "service",
-      title: "Peer Reviewer",
-      org: "Journal of Artificial Intelligence (since Jun 2026) \u00b7 PLOS ONE (since Sep 2025)",
-      for: "Manuscripts on machine learning, data augmentation and AI-based predictive modelling"
     }
   ],
 
@@ -2851,10 +2915,11 @@ const SITE = {
     { id: "news",         label: "News & Photos",   title: "News",             alt: false },
     { id: "publications", label: "Publications",    title: "Publications",     alt: true  },
     { id: "projects",     label: "Projects",        title: "Projects",         alt: false },
-    { id: "awards",       label: "Awards & Service", title: "Awards & Service", alt: true  },
+    { id: "awards",       label: "Awards",          title: "Awards & Scholarships", alt: true },
     { id: "education",    label: "Education",       title: "Education",        alt: false },
     { id: "experience",   label: "Experience",      title: "Work Experience",  alt: true  },
-    { id: "contact",      label: "Contact",         title: "Get In Touch",     alt: false }
+    { id: "services",     label: "Academic Services", title: "Academic Services", alt: false },
+    { id: "contact",      label: "Contact",         title: "Get In Touch",     alt: true  }
   ],
 
   /* Milliseconds between hero slides. */
@@ -4100,6 +4165,43 @@ const SITE = {
     }, [el("div", { class: "wrap" }, [head].concat(groups, [foot]))]);
   }
 
+  /* -------------------------- academic services -------------------------- */
+  function renderServices(cfg) {
+    var items = SITE.services || [];
+    if (!items.length) return null;
+
+    var list = el("ul", { class: "svc-list" }, items.map(function (v) {
+      return el("li", { class: "card svc" }, [
+        el("span", { class: "svc__ico" }, [icon("verify")]),
+        el("div", { class: "svc__body" }, [
+          el("div", { class: "svc__head" }, [
+            el("h3", { class: "svc__role" }, [txt(v.role)]),
+            has(v.date) ? el("span", { class: "svc__date", text: v.date }) : null
+          ]),
+          el("p", { class: "svc__org" }, [txt(v.org)]),
+          has(v.manuscript)
+            ? el("p", { class: "svc__ms" }, [
+                el("span", { class: "svc__ms-label", text: "Manuscript: " }),
+                el("em", { text: "\u201C" + v.manuscript + "\u201D" })
+              ])
+            : null,
+          has(v.note) ? el("p", { class: "svc__note", text: v.note }) : null,
+          (v.link && has(v.link.href))
+            ? el("p", { class: "svc__link" }, [
+                el("a", {
+                  href: encodeURI(v.link.href), rel: "noopener", target: "_blank",
+                  "aria-label": (v.link.label || "ORCID record") + " for " +
+                                (has(v.org) ? v.org : "this review")
+                }, [icon("orcid", "ico"), el("span", { text: v.link.label || "ORCID" })])
+              ])
+            : null
+        ])
+      ]);
+    }));
+
+    return sectionShell(cfg, [list]);
+  }
+
   /* ------------------------------- contact ------------------------------- */
   function renderContact(cfg) {
     var c = SITE.contact || {};
@@ -4393,6 +4495,7 @@ const SITE = {
     projects:     renderProjects,
     publications: renderPublications,
     experience:   renderExperience,
+    services:     renderServices,
     education:    renderEducation,
     contact:      renderContact
   };
