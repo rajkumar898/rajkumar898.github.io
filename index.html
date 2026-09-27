@@ -1023,26 +1023,32 @@ a:hover { color: var(--accent-hover); }
    so there is no gold badge. */
 .svc-list { display: grid; gap: .85rem; }
 .svc {
-  display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: .9rem;
+  display: grid; grid-template-columns: 3.75rem minmax(0, 1fr); gap: 1.1rem;
   padding: 1.25rem 1.35rem; border-radius: var(--r-lg);
   align-items: start;
 }
-.svc__ico {
+/* One square box for logos of very different shapes — PLOS is a wide
+   wordmark, the JAI mark is square — so `contain` on a white ground keeps
+   both readable without cropping either. */
+.svc__mark {
   display: flex; align-items: center; justify-content: center;
-  width: 2.25rem; height: 2.25rem; border-radius: 50%; flex: none;
-  background: var(--accent-soft); color: var(--accent);
+  width: 3.75rem; height: 3.75rem; flex: none;
+  padding: .4rem; border-radius: 12px;
+  background: #FFFFFF; border: 1px solid var(--rule);
 }
-.svc__ico svg { width: 17px; height: 17px; }
+.svc__logo { width: 100%; height: 100%; object-fit: contain; display: block; }
 .svc__head {
   display: flex; flex-wrap: wrap; align-items: baseline;
   justify-content: space-between; gap: .2rem 1rem;
 }
-.svc__role { font-size: 1.0625rem; font-weight: 700; line-height: 1.35; color: var(--ink); }
+.svc__org { font-size: 1.0625rem; font-weight: 700; line-height: 1.35; color: var(--ink); }
+.svc__org a { color: inherit; }
+.svc__org a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: .16em; }
 .svc__date {
   font-size: .8125rem; font-weight: 600; color: var(--accent);
   white-space: nowrap; font-variant-numeric: tabular-nums;
 }
-.svc__org { font-size: .95rem; font-weight: 500; color: var(--ink-2); margin: .15rem 0 0; }
+.svc__role { font-size: .9rem; font-weight: 500; color: var(--ink-2); margin: .15rem 0 0; }
 .svc__ms { font-size: .875rem; color: var(--ink-2); line-height: 1.6; margin: .55rem 0 0; }
 .svc__ms-label { font-weight: 600; color: var(--ink-3); }
 .svc__note { font-size: .875rem; color: var(--ink-3); line-height: 1.65; margin: .4rem 0 0; }
@@ -1054,7 +1060,8 @@ a:hover { color: var(--accent-hover); }
 .svc__link a:hover { text-decoration: underline; text-underline-offset: .15em; }
 .svc__link .ico { width: 14px; height: 14px; flex: none; }
 @media (max-width: 560px) {
-  .svc { grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: 1.1rem 1.15rem; }
+  .svc { grid-template-columns: 3rem minmax(0, 1fr); gap: .8rem; padding: 1.1rem 1.15rem; }
+  .svc__mark { width: 3rem; height: 3rem; }
 }
 
 /* ===========================================================================
@@ -2756,8 +2763,11 @@ const SITE = {
   /* --------------------------- ACADEMIC SERVICES -------------------------
      Reviewing and other service to the field. One entry per assignment.
 
-       role        what you did
-       org         the journal or venue
+       org         the journal \u2014 this is the heading of the card
+       url         the journal's home page; the name links to it
+       logo        the journal's mark, in logos/; a missing file draws a
+                   lettered monogram rather than a broken image
+       role        what you did, shown under the name
        date        when it started, or the month of the review
        manuscript  the title reviewed, shown in quotes — omit it and the line
                    is simply not drawn
@@ -2768,16 +2778,20 @@ const SITE = {
      ----------------------------------------------------------------------- */
   services: [
     {
-      role: "Peer Reviewer",
       org: "PLOS ONE",
+      url: "https://journals.plos.org/plosone/",
+      logo: "logos/plos-one.png",
+      role: "Peer Reviewer",
       date: "Since Dec 2025",
       manuscript: "Duple-Balanced Ensemble: A Novel Approach to Mitigate Inter-Class and Intra-Class Imbalances for Credit Card Fraud Detection",
       note: "Reviewed the ensemble design, its treatment of inter-class and intra-class imbalance, and whether the evaluation protocol supported the reported gains in fraud detection.",
       link: { label: "Verified on ORCID", href: "https://orcid.org/0009-0008-6070-3855" }
     },
     {
-      role: "Peer Reviewer",
       org: "Journal of Artificial Intelligence",
+      url: "https://www.techscience.com/journal/jai",
+      logo: "logos/journal-of-artificial-intelligence.png",
+      role: "Peer Reviewer",
       date: "Since May 2026",
       manuscript: "An Intelligent and Interpretable Framework for Sustainable Solar Panel Maintenance",
       note: "Assessed the model design, the evaluation protocol and the reproducibility of the reported results for an AI-based predictive maintenance framework.",
@@ -4171,14 +4185,22 @@ const SITE = {
     if (!items.length) return null;
 
     var list = el("ul", { class: "svc-list" }, items.map(function (v) {
+      /* The journal leads the card, so its name is the heading and links to
+         the journal itself; "Peer Reviewer" sits under it as the role. */
+      var name = has(v.url)
+        ? el("a", { href: encodeURI(v.url), rel: "noopener", target: "_blank" }, [txt(v.org)])
+        : txt(v.org);
+
       return el("li", { class: "card svc" }, [
-        el("span", { class: "svc__ico" }, [icon("verify")]),
+        el("span", { class: "svc__mark" }, [
+          safeImg(v.logo, (has(v.org) ? v.org : "Journal") + " logo", "svc__logo", monogram(v.org))
+        ]),
         el("div", { class: "svc__body" }, [
           el("div", { class: "svc__head" }, [
-            el("h3", { class: "svc__role" }, [txt(v.role)]),
+            el("h3", { class: "svc__org" }, [name]),
             has(v.date) ? el("span", { class: "svc__date", text: v.date }) : null
           ]),
-          el("p", { class: "svc__org" }, [txt(v.org)]),
+          el("p", { class: "svc__role" }, [txt(v.role)]),
           has(v.manuscript)
             ? el("p", { class: "svc__ms" }, [
                 el("span", { class: "svc__ms-label", text: "Manuscript: " }),
