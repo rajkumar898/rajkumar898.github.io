@@ -1,0 +1,103 @@
+# =============================================================================
+# rajkumar898.github.io — what does NOT go in a public repository
+#
+# The site is one file, index.html, plus the assets it references. Everything
+# else in this folder is source material the tools in tools/ consume: photo
+# and video originals, Word documents, the parked rebuild. None of it is
+# served, all of it is large, and some of it should not be public at all.
+#
+# NOTHING IS DELETED by this file — every original stays on your disk exactly
+# where it is. It simply is not committed.
+#
+# To check what git would actually keep, once the repo exists:
+#     git status --porcelain --ignored=no
+# =============================================================================
+
+# ---- tooling -----------------------------------------------------------
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# ---- credentials: never, under any circumstances ------------------------
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+secrets.*
+credentials.*
+
+# ---- photo and video originals -----------------------------------------
+# ~317 MB of full-resolution stills and phone videos. tools/build_media.py
+# turns these into Photos/web/, which IS committed and is what the page loads.
+Photos/*
+!Photos/web/
+
+# ---- project screen recordings -----------------------------------------
+# ~754 MB of raw captures, four of them over 100 MB. The web copies live in
+# assets/demos/ and assets/video/ and are committed.
+projects/
+
+# ---- the portrait original ---------------------------------------------
+# 2 MB PNG; assets/profile.jpg is the copy the page uses.
+profile photo/
+
+# ---- the parked multi-page rebuild --------------------------------------
+# A second, unfinished site. Publishing it alongside the real one would put
+# two versions of your CV on the internet.
+Updated_version/
+
+# ---- documents ----------------------------------------------------------
+# Your CV and project notes in editable form. The CV belongs on the site as
+# a PDF you export deliberately, not as a .docx anyone can open and edit.
+*.docx
+*.doc
+*.dotx
+*.pptx
+*.ppt
+*.potx
+*.xlsx
+*.xls
+*.csv
+
+# ---- stray recordings at the repo root ----------------------------------
+Recording *.mp4
+
+# ---- the CV lives at assets/Raj-Kumar-CV.pdf, which is what the page links
+# This root copy is the same file; committing both would leave two CVs on the
+# site that can drift apart. The leading slash pins the rule to the root.
+/Raj-Kumar-CV.pdf
+
+# ---- papers: host the PDF only where the licence allows it --------------
+# Every page of every PDF was searched for a licence statement. Only two carry
+# one, and only those two are committed:
+#
+#   IEEE Access      creativecommons.org/licenses/by/4.0   -> committed
+#   Energy Reports   creativecommons.org/licenses/by/4.0   -> committed
+#   SETA             "(c) 2026 Published by Elsevier Ltd"  -> ignored, DOI only
+#   IJACSA           no licence statement in 11 pages      -> ignored, DOI only
+#   5 conference     no licence statement anywhere         -> ignored, page only
+#
+# The page links the ignored ones by DOI or publisher page, so nothing 404s.
+# If a paper turns out to be open access after all, delete its line here and
+# add `pdf:` back to its entry in index.html.
+Published Paper PDFs/published conference papers/
+Published Paper PDFs/published journal papers/3. Multi-tier*
+Published Paper PDFs/published journal papers/4. Fungal Blast*
+
+# The .png figures are the methodology-diagram masters; assets/pub-*.png are
+# the resized copies the page shows. The certificates are already in
+# assets/awards/.
+Published Paper PDFs/**/*.png
+Published Paper PDFs/**/*.jpeg
+
+# ---- build leftovers ----------------------------------------------------
+tools/_gallery.txt
+
+# ---- image masters superseded by a web copy -----------------------------
+jeju_contact_background.png
