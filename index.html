@@ -2871,9 +2871,10 @@ const SITE = {
   /* An optional italic line set beside a section heading, keyed by section id.
      NEW COPY — both of these are my wording, not yours. Read them and make
      them your own, or set either to "" to remove it. */
-  sectionQuotes: {
-    awards: "Recognized for research, contributions, and commitment to a sustainable future."
-  },
+  /* A short line shown beside a section heading, keyed by section id. Empty:
+     the headings stand on their own. Add one back as
+     `awards: "..."` and it appears to the right of that heading. */
+  sectionQuotes: {},
 
 
   /* Footer line. The year is computed at render time — never hardcode it. */
