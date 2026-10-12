@@ -70,6 +70,14 @@ LEAD = {
     'RD and Innovation Symposium':  'IMG_8002.mp4',
 }
 
+# Specific shots pinned to specific slots, counted from 1. These are placed
+# after everything else is ordered, so they override the interleaving — two
+# pins from one event can sit side by side on purpose.
+PINNED = [
+    ('Nagasaki Japan Symposium', '1 i2cner visit.jpeg', 2),
+    ('Nagasaki Japan Symposium', '3 i2cner visit.jpeg', 3),
+]
+
 out = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
 
@@ -321,10 +329,22 @@ def main():
 
     events.sort(key=lambda e: (rank(e[0]), e[0]))
 
+    # Pinned shots come out of their pools now and go back in at the end.
+    pinned = []
+    for folder, name, slot in PINNED:
+        for f, items in events:
+            hit = [m for m in items if f == folder and m['orig'] == name]
+            if hit:
+                pinned.append((slot, hit[0]))
+                break
+        else:
+            out.write('  PIN not found: %s / %s\n' % (folder, name))
+    pinned_ids = set(id(m) for _, m in pinned)
+
     # Each event's chosen lead shot moves to the front of its pool.
     pools = []
     for folder, items in events:
-        pool = list(items)
+        pool = [m for m in items if id(m) not in pinned_ids]
         want = LEAD.get(folder)
         if want:
             for k, m in enumerate(pool):
@@ -353,6 +373,9 @@ def main():
         pick = max(cand, key=lambda i: len(pools[i]))
         order.append(pools[pick].pop(0))
         last = pick
+
+    for slot, m in sorted(pinned, key=lambda t: t[0]):
+        order.insert(max(0, slot - 1), m)
 
     out.write('\nevents: %d | media: %d | skipped: %d\n'
               % (len(events), len(order), len(skipped)))
